@@ -1,0 +1,88 @@
+Test case 1 - general case
+Description: Allocate five blocks of memory and free them afterwards. The first four blocks of memory are large enough to be considered large by the program and are allocated towards the end of the heap. The fith block of memory is 50 bytes and considered small enough to be allocated towards the front of the heap. This test illustrates a simple demonstration of the program and the functionality of allocating memory on a bias based on the size of the request.
+Input: five requests for allocated memory, four being of size 100, one being of size 50
+Expected output:
+Attempting to allocate 100 bytes of data.
+Address of returned pointer: 0x60258c
+Attempting to allocate 100 bytes of data.
+Address of returned pointer: 0x602510
+Attempting to allocate 100 bytes of data.
+Address of returned pointer: 0x602494
+Attempting to allocate 100 bytes of data.
+Address of returned pointer: 0x602418
+Attempting to allocate 50 bytes of data.
+Address of returned pointer: 0x601298
+Pointer 0x60258c was successfully freed.
+Pointer 0x602510 was successfully freed.
+Pointer 0x602494 was successfully freed.
+Pointer 0x602418 was successfully freed.
+Pointer 0x601298 was successfully freed.
+
+Test case 2 - stress-test case
+Description: Attempt to free a pointer that was not allocated, attempt to free a pointer that was not returned by mymalloc(), attempt to free a pointer that was already freed by myfree(), and free pointers afterwards. This test illustrates the error-checking functionality of the program by attempting to perform illegal actions and printing the subsequent errors. The program uses macros to print the file name and line number in which the error occurs.
+Input: a char variable and a char pointer variable used for various erroneous actions
+Expected output:
+Attempting to free pointer that was never allocated.
+Error: This pointer was not returned from malloc or was never allocated.
+Error in file testmain2.c at line 10.
+Attempting to allocate 100 bytes of data.
+Address of returned pointer: 0x602628
+Attempting to free pointer to dynamic memory that was not returned from malloc.
+Error: This pointer was not returned from malloc or was never allocated.
+Error in file testmain2.c at line 15.
+Attempting redundant freeing of the same pointer.
+Pointer 0x602628 was successfully freed.
+Error: This pointer was not returned from malloc or was never allocated.
+Error in file testmain2.c at line 18.
+Allocating memory of 100 bytes.
+Address of returned pointer: 0x60268c
+Freeing pointer to allocated memory.
+Pointer 0x60268c was successfully freed.
+Allocating memory of 100 bytes.
+Address of returned pointer: 0x60268c
+Freeing pointer to allocated memory 
+Pointer 0x60268c was successfully freed.
+All done
+
+Test case 3 - saturation case
+Description: Attempt to allocate a block of memory that the heap is unable to process, then allocate an extremely large but valid memory block and attempt to allocate a smaller memory block afterwards. Then free allocated memory. This illustrates the saturation situation where allocated memory prevents the program from accepting any more requests for allocated memory.
+Input: A request for 5050 bytes, a request for 4750 bytes, and a request for 250 bytes
+Expected output:
+Attempting to allocate 5050 bytes of data.
+Error: Heap cannot allocate space of this size. 
+Error in file testmain3.c at line 10.
+Allocating memory of 4750 bytes.
+Address of returned pointer: 0x601362
+Attempting to allocate 250 bytes of data.
+Error: Heap cannot allocate space of this size.
+Error in file testmain3.c at line 15.
+Freeing the allocated memory chunk.
+Pointer 0x601362 was successfully freed.
+All done
+
+Test case 4 - fragmentation case
+Description: Allocate five blocks of memory and free them in the following order: 1st, 5th, 2nd, 4th, 3rd. This illustrates the concatenation of adjacent free memory blocks when calling myfree() to create larger, contiguous blocks of free memory.
+Input: five requests for allocated memory of size 476 each
+Expected output:
+Attempting to allocate 476 bytes of data into p1.
+Address of returned pointer: 0x6025f4
+Attempting to allocate 476 bytes of data into p2.
+Address of returned pointer: 0x602400
+Attempting to allocate 476 bytes of data into p3.
+Address of returned pointer: 0x60220c
+Attempting to allocate 476 bytes of data into p4.
+Address of returned pointer: 0x602018
+Attempting to allocate 476 bytes of data into p5.
+Address of returned pointer: 0x601e24
+Attempting to free pointer p1.
+Pointer 0x6025f4 was successfully freed.
+Attempting to free pointer p5.
+Pointer 0x601e24 was successfully freed.
+Attempting to free pointer p2.
+Pointer 0x602400 was successfully freed.
+Attempting to free pointer p4.
+Pointer 0x602018 was successfully freed.
+Attempting to free pointer p3.
+Pointer 0x60220c was successfully freed.
+Test complete.
+
